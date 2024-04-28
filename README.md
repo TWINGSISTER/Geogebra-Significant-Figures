@@ -1,7 +1,7 @@
 # Geogebra-Significant-Figures
 A collection of GGB tools to switch between a number and its textual representation preserving the number of significant figures.  More on defining tools can be found [here](https://primi235711.altervista.org/moodle/course/view.php?id=5#section-4)
 
-To use them take the basic-empty-library.ggb  This file has all the tools and no construction. File empty-library.ggb  has all the tools and some basic construction. The file example-with-library.ggb contains an example using these primitives.
+To use them take the example-with-library-signdigit-text.ggb  This file has all the tools and no construction. The package deals only with POSITIVE numbers. Numbers like -1.0  or 0.0 are not allowed.
 
 In GGB numbers receive an internal representation that do not care about significant figures. If you put in the input line in GGB either a=2.0 or a=2.00 you will obtain the same internal representation for the number a. 
 It would be nice to have manipulation primitives for textual representation of 
@@ -41,9 +41,9 @@ The code for `snexp(ntxt)` could be:
 
 The code for `snmants(ntxt)` could be:
 
-`If(FromBase(ntxt, 10) > 1, Take(intps(ntxt), 2) + mants(ntxt),`
->`Take(mants(ntxt), abs(log(10, FromBase(ntxt, 10))) - 1)`
-`)`
+`If[FromBase[ntxt, 10] ≥ 1,`
+>`If[FromBase[ntxt, 10] ≥ 10, Take[intps, 2] + mants, mants],` 
+>>`If[Length[TextToUnicode[mants]] ≥ 2, Take[mants, floor(abs(log(10, FromBase[ntxt, 10]))) + 2], ""]]`
 
 The code for `snintps(ntxt)` could be:
 
@@ -51,3 +51,6 @@ The code for `snintps(ntxt)` could be:
 >`If(FromBase(intps(ntxt), 10) >=1, UnicodeToLetter(Element(TextToUnicode(intps(ntxt)), 1)),`
 >>`UnicodeToLetter(Element(TextToUnicode(mants(ntxt)), 1 + abs(log(10, FromBase(ntxt, 10)))))`
 `))` 
+
+Another Tool is `FromBaseSci` that takes a string and returns a number. The string could be a number in decimal (e.g. "-11.23") or scientific notation (e.g. "-1.123E1"). 
+The tool with other two tools that are building blocks (FromBaseDec and FromBaseSgn) and an example can be found in file `example-with-library-FromBase-text.ggb`

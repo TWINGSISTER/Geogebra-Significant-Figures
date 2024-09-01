@@ -1,7 +1,7 @@
 # Geogebra-Significant-Figures
 A collection of GGB tools to switch between a number and its textual representation preserving the number of significant figures.  More on defining tools can be found [here](https://primi235711.altervista.org/moodle/course/view.php?id=5#section-4)
 
-To use them take the example-with-library-signdigit-text.ggb  This file has all the tools and no construction. The package deals only with POSITIVE numbers. Numbers like -1.0  or 0.0 are not allowed.
+To use them take the `example-with-library.ggb`.  This file has all the tools and no construction. The package deals only with POSITIVE numbers. Numbers like -1.0  or 0.0 are not allowed.
 
 In GGB numbers receive an internal representation that do not care about significant figures. If you put in the input line in GGB either a=2.0 or a=2.00 you will obtain the same internal representation for the number a. 
 It would be nice to have manipulation primitives for textual representation of 
@@ -54,3 +54,8 @@ The code for `snintps(ntxt)` could be:
 
 Another Tool is `FromBaseSci` that takes a string and returns a number. The string could be a number in decimal (e.g. "-11.23") or scientific notation (e.g. "-1.123E1"). 
 The tool with other two tools that are building blocks (FromBaseDec and FromBaseSgn) and an example can be found in file `example-with-library-FromBase-text.ggb`
+
+Finally the tool `sfround(ntxt,sf)` takes a string `ntxt` that denotes a number in STANDARD NOTATION (not EXPONENTIAL NOTATION) and returns a list `{Coeff,Exp}` for its scientific notation rounded to `sf` digits.  We assume that sf is smaller or equal to  the number of significant figures in ntxt. If not trailing zeros are added but this is not correct. 
+This tool follows these steps: first the scientific notation is calculated with sncs and snexp.  Then, sncs is rounded to sf digits. This is done via the `round` built in function that operates on numbers.  So 0.999 rounded to 2 significant digits gives the number 1 that is the same as 1.0. So the result of round is converted back into a string and a string of zeros is added (0000 or 0.000 actually doing what is needed). From this restored representation a string of sf significant digits is extracted. 
+Note that we are working on numbers like n.dd or   or n.d  or n. with non zero n, so a string of length 2 never shows. 
+This number is passed thru sn tool so that results like 9.99 rounded to 2 digits (i.e. 10.) is normalized to 1.0E1. The exponent rising from this last step is added to the original one to yeld a correct exponent.   
